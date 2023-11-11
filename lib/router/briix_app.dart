@@ -1,15 +1,17 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:briix/router/app_router.dart';
+import 'package:briix/uilocs/toast_c.dart';
 import 'package:flutter/material.dart';
+import 'package:get_it/get_it.dart';
 
 class BriixApp extends StatelessWidget {
   const BriixApp({super.key});
 
   @override
-  Widget build(_) {
-    final rootRouter = RootRouter();
+  Widget build(BuildContext context) {
+    ToastC.init(context);
     return MaterialApp.router(
-      routerConfig: rootRouter.config(
+      routerConfig: GetIt.I.get<RootRouter>().config(
         deepLinkBuilder: (dl) {
           return DeepLink([
             const MovieCollectionRoute(),

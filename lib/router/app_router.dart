@@ -1,7 +1,8 @@
 import 'package:auto_route/auto_route.dart';
-import 'package:briix/movie_collection_page.dart';
-import 'package:briix/movie_crud_page.dart';
+import 'package:briix/uis/movie_collection_page.dart';
+import 'package:briix/uis/movie_crud_page.dart';
 import 'package:flutter/material.dart';
+import 'package:get_it/get_it.dart';
 
 part 'app_router.gr.dart';
 
@@ -12,4 +13,8 @@ class RootRouter extends _$RootRouter {
         AutoRoute(path: "/movies", page: MovieCollectionRoute.page),
         AutoRoute(path: "/movie/:id", page: MovieCRUDRoute.page),
       ];
+
+  static void init() {
+    GetIt.I.registerSingleton<RootRouter>(RootRouter());
+  }
 }
