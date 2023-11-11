@@ -10,6 +10,14 @@ class Movie {
     required this.genres,
   });
 
+  Movie.empty() {
+    id = '';
+    title = '';
+    director = '';
+    summary = '';
+    genres = [];
+  }
+
   Movie.fromJson(Map<String, dynamic> data)
       : id = data['id'],
         title = data['title'],

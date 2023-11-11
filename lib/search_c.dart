@@ -7,21 +7,26 @@ import 'package:mobx/mobx.dart' as mx;
 class SearchC {
   final TextEditingController tec = TextEditingController();
   final SharedPref sp = GetIt.I.get<SharedPref>();
-  final mx.Observable<List<Movie>> movies = mx.Observable([]),
-      filteredMovies = mx.Observable([]);
+  final mx.ObservableList<Movie> movies = mx.ObservableList<Movie>(),
+      filteredMovies = mx.ObservableList<Movie>();
 
   SearchC() {
     tec.addListener(() => mx.Action(() => _onTextChanged(tec.text))());
+    sp.isReady.observe((p0) {
+      if (p0.newValue ?? false) return;
+      getLocalMovies();
+    });
   }
 
   void _onTextChanged(String text) {
+    filteredMovies.clear();
     if (text.isEmpty) {
-      filteredMovies.value = movies.value;
-      return;
+      filteredMovies.addAll(movies);
+    } else {
+      filteredMovies.addAll(movies
+          .where((e) => e.title.toLowerCase().contains(text.toLowerCase()))
+          .toList());
     }
-    filteredMovies.value = movies.value
-        .where((e) => e.title.toLowerCase().contains(text.toLowerCase()))
-        .toList();
   }
 
   static SearchC init() => GetIt.I.registerSingleton<SearchC>(
@@ -30,18 +35,19 @@ class SearchC {
       );
 
   void getLocalMovies() {
-    movies.value = sp.getLocalMovies();
-    filteredMovies.value = movies.value;
+    movies.clear();
+    movies.addAll(sp.getLocalMovies());
   }
 
   void loadMovies() {
-    if (sp.isReady.value) {
-      getLocalMovies();
-    }
-    sp.isReady.observe((p0) {
-      if (p0.newValue ?? false) return;
-      getLocalMovies();
+    movies.observe((p0) {
+      final List<Movie> newMovies = p0.list.toList();
+      tec.clear();
+      filteredMovies.clear();
+      filteredMovies.addAll(newMovies);
+      sp.saveLocalMovies(newMovies);
     });
+    if (sp.isReady.value) getLocalMovies();
   }
 
   void dispose() {

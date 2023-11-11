@@ -1,10 +1,10 @@
+import 'package:briix/movie_crud_page.dart';
 import 'package:briix/movie_tile.dart';
 import 'package:briix/search_c.dart';
-import 'package:briix/shared_pref.dart';
 import 'package:briix/test_movies.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
-import 'package:get_it/get_it.dart';
+import 'package:mobx/mobx.dart' as mx;
 
 class MovieCollectionPage extends StatefulWidget {
   const MovieCollectionPage({super.key});
@@ -29,8 +29,11 @@ class _MovieCollectionPageState extends State<MovieCollectionPage> {
         floatingActionButton: FloatingActionButton(
           shape: const CircleBorder(),
           child: const Icon(Icons.add),
-          onPressed: () =>
-              GetIt.I.get<SharedPref>().saveLocalMovies(testMovies),
+          onPressed: () => Navigator.of(context).push(
+            MaterialPageRoute(
+              builder: (_) => const MovieCRUDPage(),
+            ),
+          ),
         ),
         body: Column(
           children: [
@@ -49,13 +52,24 @@ class _MovieCollectionPageState extends State<MovieCollectionPage> {
                 child: SizedBox(
                   width: double.infinity,
                   child: Observer(
-                    builder: (_) => Wrap(
-                      alignment: WrapAlignment.center,
-                      children: [
-                        for (int i = 0; i < sc.filteredMovies.value.length; i++)
-                          MovieTile(sc.filteredMovies.value[i])
-                      ],
-                    ),
+                    builder: (_) => sc.filteredMovies.isNotEmpty
+                        ? Wrap(
+                            alignment: WrapAlignment.center,
+                            children: [
+                              for (int i = 0; i < sc.filteredMovies.length; i++)
+                                MovieTile(i)
+                            ],
+                          )
+                        : SizedBox(
+                            height: 400,
+                            child: Center(
+                              child: ElevatedButton(
+                                child: const Text('Load Test Data'),
+                                onPressed: () => mx.Action(
+                                    () => sc.movies.addAll(testMovies))(),
+                              ),
+                            ),
+                          ),
                   ),
                 ),
               ),

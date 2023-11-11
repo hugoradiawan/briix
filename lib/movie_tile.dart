@@ -1,12 +1,20 @@
 import 'package:briix/movie.dart';
+import 'package:briix/movie_crud_page.dart';
+import 'package:briix/search_c.dart';
 import 'package:flutter/material.dart';
+import 'package:get_it/get_it.dart';
 
 class MovieTile extends StatelessWidget {
-  const MovieTile(this.movie, {super.key});
+  const MovieTile(this.index, {super.key});
 
-  final Movie movie;
+  final int index;
   @override
-  Widget build(_) => Container(
+  Widget build(BuildContext context) {
+    final Movie movie = GetIt.I.get<SearchC>().filteredMovies[index];
+    return InkWell(
+      onTap: () => Navigator.of(context)
+          .push(MaterialPageRoute(builder: (_) => MovieCRUDPage(index: index))),
+      child: Container(
         margin: const EdgeInsets.all(8),
         decoration: const BoxDecoration(
           color: Colors.lightBlue,
@@ -40,5 +48,7 @@ class MovieTile extends StatelessWidget {
             ),
           )
         ]),
-      );
+      ),
+    );
+  }
 }

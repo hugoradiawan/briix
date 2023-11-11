@@ -6,7 +6,7 @@ final List<Movie> testMovies = [
     title: 'The Shawshank Redemption',
     director: 'Frank Darabont',
     summary:
-        'Good Movies, all actors are handsome and beautiful, and the story is very good, i like the opening scene, my mother love it too, all great',
+        'Good Movies, all actors are handsome and beautiful, and the story is very good, i like the opening.',
     genres: [
       'Drama',
       'Crime',
@@ -17,10 +17,10 @@ final List<Movie> testMovies = [
     title: 'The Godfather',
     director: 'Francis Ford Coppola',
     summary:
-        'Good Movies, all actors are handsome and beautiful, and the story is very good, i like the opening scene, my mother love it too, all great',
+        'Good Movies, all actors are handsome and beautiful, and the story is very good, i like the opening.',
     genres: [
       'Drama',
-      'Love Story',
+      'Mistery',
       'Comedy',
     ],
   ),
@@ -29,7 +29,7 @@ final List<Movie> testMovies = [
     title: 'The Dark Knight',
     director: 'Christopher Nolan',
     summary:
-        'Good Movies, all actors are handsome and beautiful, and the story is very good, i like the opening scene, my mother love it too, all great',
+        'Good Movies, all actors are handsome and beautiful, and the story is very good, i like the opening.',
     genres: [
       'Drama',
       'Crime',
@@ -42,7 +42,7 @@ final List<Movie> testMovies = [
     title: 'The Sonmother',
     director: 'Bong Joon-ho',
     summary:
-        'Good Movies, all actors are handsome and beautiful, and the story is very good, i like the opening scene, my mother love it too, all great',
+        'Good Movies, all actors are handsome and beautiful, and the story is very good, i like the opening.',
     genres: [
       'Sci-Fi',
     ],
@@ -52,10 +52,10 @@ final List<Movie> testMovies = [
     title: 'Whale Rider',
     director: 'Niki Caro',
     summary:
-        'Good Movies, all actors are handsome and beautiful, and the story is very good, i like the opening scene, my mother love it too, all great',
+        'Good Movies, all actors are handsome and beautiful, and the story is very good, i like the opening.',
     genres: [
       'Drama',
-      'Love Story',
+      'Documentary',
     ],
   )
 ];

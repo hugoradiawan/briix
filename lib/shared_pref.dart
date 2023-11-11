@@ -8,7 +8,33 @@ import 'package:shared_preferences/shared_preferences.dart';
 class SharedPref {
   late SharedPreferences prefs;
   final mx.Observable<bool> isReady = mx.Observable(false);
-  static const _moviesKey = 'movies';
+  static const String _moviesKey = 'movies', _genresKey = 'genres';
+  static const List<String> genres = [
+    'Action',
+    'Adventure',
+    'Animation',
+    'Biography',
+    'Comedy',
+    'Crime',
+    'Documentary',
+    'Drama',
+    'Family',
+    'Fantasy',
+    'Film Noir',
+    'History',
+    'Horror',
+    'Music',
+    'Musical',
+    'Mystery',
+    'Romance',
+    'Sci-Fi',
+    'Short Film',
+    'Sport',
+    'Superhero',
+    'Thriller',
+    'War',
+    'Western',
+  ];
 
   static Future<void> init() async {
     if (GetIt.I.isRegistered<SharedPref>()) return;
@@ -31,5 +57,15 @@ class SharedPref {
         movies.map((e) => e.toJson()).toList();
     final String moviesJson = json.encode(moviesList);
     prefs.setString(_moviesKey, moviesJson);
+  }
+
+  List<String> getLocalGenres() {
+    final List<String>? genresList = prefs.getStringList(_genresKey);
+    if (genresList == null) return genres;
+    return genresList;
+  }
+
+  void saveLocalGenres(List<String> genres) {
+    prefs.setStringList(_genresKey, genres);
   }
 }
