@@ -3,7 +3,7 @@ import 'dart:math';
 import 'package:briix/blocs/movie.dart';
 import 'package:briix/configs/shared_pref.dart';
 import 'package:briix/router/app_router.dart';
-import 'package:briix/uilocs/search_c.dart';
+import 'package:briix/uilocs/movie_collection_c.dart';
 import 'package:briix/uilocs/toast_c.dart';
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
@@ -11,7 +11,7 @@ import 'package:mobx/mobx.dart';
 
 class MovieCRUDC {
   MovieCRUDC({this.id});
-  final MovieCollectionC mcc = GetIt.I.get<MovieCollectionC>();
+  late MovieCollectionC mcc;
   final TextEditingController titleTec = TextEditingController(),
       directorTec = TextEditingController(),
       summaryTec = TextEditingController();
@@ -22,6 +22,13 @@ class MovieCRUDC {
   final String? id;
 
   void init() {
+    if (GetIt.I.isRegistered<MovieCollectionC>()) {
+      mcc = GetIt.I.get<MovieCollectionC>();
+    } else {
+      mcc = GetIt.I.registerSingleton<MovieCollectionC>(MovieCollectionC(),
+          dispose: (sc) => sc.tec.dispose());
+      mcc.loadMovies();
+    }
     final SharedPref sp = GetIt.I.get<SharedPref>();
     genres.clear();
     genres.addAll(sp.getLocalGenres());

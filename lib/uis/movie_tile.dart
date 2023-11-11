@@ -1,7 +1,7 @@
 import 'package:briix/blocs/movie.dart';
 import 'package:briix/router/app_router.dart' as ar;
 import 'package:briix/router/app_router.dart';
-import 'package:briix/uilocs/search_c.dart';
+import 'package:briix/uilocs/movie_collection_c.dart';
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 

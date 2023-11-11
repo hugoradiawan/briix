@@ -2,7 +2,7 @@ import 'package:auto_route/auto_route.dart';
 import 'package:briix/configs/shared_pref.dart';
 import 'package:briix/router/app_router.dart';
 import 'package:briix/test_data.dart';
-import 'package:briix/uilocs/search_c.dart';
+import 'package:briix/uilocs/movie_collection_c.dart';
 import 'package:briix/uis/movie_tile.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';

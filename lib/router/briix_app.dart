@@ -14,9 +14,14 @@ class BriixApp extends StatelessWidget {
       routerConfig: GetIt.I.get<RootRouter>().config(
         deepLinkBuilder: (dl) {
           return DeepLink([
-            const MovieCollectionRoute(),
-            if (dl.uri.pathSegments.contains('movie'))
+            if (dl.uri.pathSegments.contains('movies') ||
+                dl.uri.pathSegments.isEmpty)
+              const MovieCollectionRoute()
+            else if (dl.uri.pathSegments.contains('movie')) ...[
+              const MovieCollectionRoute(),
               MovieCRUDRoute(id: dl.uri.pathSegments[1]),
+            ] else
+              const NotFoundRoute(),
           ]);
         },
       ),
