@@ -1,13 +1,15 @@
+import 'package:auto_route/auto_route.dart';
 import 'package:briix/movie_crud_c.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:gap/gap.dart';
 import 'package:get_it/get_it.dart';
 
+@RoutePage()
 class MovieCRUDPage extends StatefulWidget {
-  const MovieCRUDPage({this.index, super.key});
+  const MovieCRUDPage({@PathParam('id') this.id, super.key});
 
-  final int? index;
+  final String? id;
 
   @override
   State<MovieCRUDPage> createState() => _MovieCRUDPageState();
@@ -17,23 +19,31 @@ class _MovieCRUDPageState extends State<MovieCRUDPage> {
   late MovieCRUDC mc;
 
   @override
+  void initState() {
+    mc = GetIt.I.isRegistered<MovieCRUDC>(instanceName: widget.id)
+        ? GetIt.I.get<MovieCRUDC>(instanceName: widget.id)
+        : GetIt.I.registerSingleton<MovieCRUDC>(MovieCRUDC(id: widget.id),
+            instanceName: widget.id);
+    super.initState();
+  }
+
+  @override
   void didChangeDependencies() {
-    mc = GetIt.I.registerSingleton<MovieCRUDC>(MovieCRUDC(index: widget.index))
-      ..init(context);
+    mc.init(context);
     super.didChangeDependencies();
   }
 
   @override
-  Widget build(_) => Scaffold(
+  Widget build(BuildContext context) => Scaffold(
         appBar: AppBar(
           actions: [
-            if (widget.index != null)
+            if (widget.id != null)
               IconButton(
                 onPressed: mc.delete,
                 icon: const Icon(Icons.delete),
               ),
             IconButton(
-              onPressed: mc.save,
+              onPressed: () => mc.save(context),
               icon: const Icon(Icons.save),
             ),
             const Gap(10),
@@ -64,7 +74,9 @@ class _MovieCRUDPageState extends State<MovieCRUDPage> {
                 maxLength: 100,
                 controller: mc.summaryTec,
                 decoration: const InputDecoration(
-                    labelText: 'Summary', hintText: 'Enter a short summary'),
+                  labelText: 'Summary',
+                  hintText: 'Enter a short summary',
+                ),
               ),
               Observer(
                 builder: (_) => Wrap(

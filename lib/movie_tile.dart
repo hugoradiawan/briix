@@ -1,5 +1,6 @@
+import 'package:auto_route/auto_route.dart';
 import 'package:briix/movie.dart';
-import 'package:briix/movie_crud_page.dart';
+import 'package:briix/router/app_router.dart' as ar;
 import 'package:briix/search_c.dart';
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
@@ -12,8 +13,7 @@ class MovieTile extends StatelessWidget {
   Widget build(BuildContext context) {
     final Movie movie = GetIt.I.get<SearchC>().filteredMovies[index];
     return InkWell(
-      onTap: () => Navigator.of(context)
-          .push(MaterialPageRoute(builder: (_) => MovieCRUDPage(index: index))),
+      onTap: () => AutoRouter.of(context).push(ar.MovieCRUDRoute(id: movie.id)),
       child: Container(
         margin: const EdgeInsets.all(8),
         decoration: const BoxDecoration(

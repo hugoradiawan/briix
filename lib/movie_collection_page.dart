@@ -1,3 +1,4 @@
+import 'package:auto_route/auto_route.dart';
 import 'package:briix/movie_crud_page.dart';
 import 'package:briix/movie_tile.dart';
 import 'package:briix/search_c.dart';
@@ -6,6 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:mobx/mobx.dart' as mx;
 
+@RoutePage()
 class MovieCollectionPage extends StatefulWidget {
   const MovieCollectionPage({super.key});
 

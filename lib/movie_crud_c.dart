@@ -1,5 +1,6 @@
 import 'dart:math';
 
+import 'package:auto_route/auto_route.dart';
 import 'package:briix/movie.dart';
 import 'package:briix/search_c.dart';
 import 'package:briix/shared_pref.dart';
@@ -9,7 +10,7 @@ import 'package:get_it/get_it.dart';
 import 'package:mobx/mobx.dart';
 
 class MovieCRUDC {
-  MovieCRUDC({this.index});
+  MovieCRUDC({this.id});
   final SearchC sc = GetIt.I.get<SearchC>();
   final TextEditingController titleTec = TextEditingController(),
       directorTec = TextEditingController(),
@@ -18,22 +19,34 @@ class MovieCRUDC {
   final ObservableList<String> genres = ObservableList(),
       selectedGenres = ObservableList();
 
-  final int? index;
+  final String? id;
 
   void init(BuildContext context) {
     fToast.init(context);
+    genres.clear();
     genres.addAll(GetIt.I.get<SharedPref>().getLocalGenres());
-    if (index == null) return;
-    final Movie tempMovie = sc.movies[index!];
+    if (id == null) return;
+    print('id: $id');
+    print('movies: ${sc.movies.length}');
+    if (sc.movies.isEmpty) {
+      final local = GetIt.I.get<SharedPref>().getLocalMovies();
+      print('local: ${local.length}');
+      sc.movies.addAll(local);
+    }
+    print('movies 111: ${sc.movies.length}');
+    final Movie tempMovie =
+        sc.movies.firstWhere((Movie movie) => movie.id == id);
     titleTec.text = tempMovie.title;
     directorTec.text = tempMovie.director;
-    summaryTec.text = sc.filteredMovies[index!].summary;
+    summaryTec.text = tempMovie.summary;
     selectedGenres.addAll(tempMovie.genres);
   }
 
   void delete() {
-    if (index == null) return;
-    sc.movies.removeAt(index!);
+    if (id == null) return;
+    final int index = sc.movies.indexWhere((e) => e.id == id);
+    if (index == -1) return;
+    sc.movies.removeAt(index);
   }
 
   void onGenreSelected(String genre) {
@@ -84,39 +97,40 @@ class MovieCRUDC {
         toastDuration: const Duration(seconds: 2),
       );
 
-  void save() {
-    if (titleTec.text.isEmpty) {
-      showErrorToast('Title is required');
-      return;
-    }
-    if (directorTec.text.isEmpty) {
-      showErrorToast('Director is required');
-      return;
-    }
-    if (summaryTec.text.isEmpty) {
-      showErrorToast('Summary is required');
-      return;
-    }
-    if (summaryTec.text.length > 100) {
-      showErrorToast('Summary is too long');
-      return;
-    }
-    if (selectedGenres.isEmpty) {
-      showErrorToast('At least one genre is required');
-      return;
-    }
-    final Movie newMovie = Movie(
-      id: randomString(10),
-      title: titleTec.text,
-      director: directorTec.text,
-      summary: summaryTec.text,
-      genres: selectedGenres.toList(),
-    );
-    if (index == null) {
-      sc.movies.add(newMovie);
-    } else {
-      sc.movies[index!] = newMovie;
-    }
+  void save(BuildContext context) {
+    // if (titleTec.text.isEmpty) {
+    //   showErrorToast('Title is required');
+    //   return;
+    // }
+    // if (directorTec.text.isEmpty) {
+    //   showErrorToast('Director is required');
+    //   return;
+    // }
+    // if (summaryTec.text.isEmpty) {
+    //   showErrorToast('Summary is required');
+    //   return;
+    // }
+    // if (summaryTec.text.length > 100) {
+    //   showErrorToast('Summary is too long');
+    //   return;
+    // }
+    // if (selectedGenres.isEmpty) {
+    //   showErrorToast('At least one genre is required');
+    //   return;
+    // }
+    // final Movie newMovie = Movie(
+    //   id: randomString(10),
+    //   title: titleTec.text,
+    //   director: directorTec.text,
+    //   summary: summaryTec.text,
+    //   genres: selectedGenres.toList(),
+    // );
+    // if (index == null) {
+    //   sc.movies.add(newMovie);
+    // } else {
+    //   sc.movies[index!] = newMovie;
+    // }
+    AutoRouter.of(context).pop();
   }
 
   String randomString(int length) {
@@ -134,6 +148,6 @@ class MovieCRUDC {
     titleTec.dispose();
     directorTec.dispose();
     summaryTec.dispose();
-    GetIt.I.unregister<MovieCRUDC>();
+    GetIt.I.unregister<MovieCRUDC>(instanceName: id);
   }
 }

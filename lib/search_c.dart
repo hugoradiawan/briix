@@ -29,14 +29,20 @@ class SearchC {
     }
   }
 
-  static SearchC init() => GetIt.I.registerSingleton<SearchC>(
-        SearchC(),
-        dispose: (sc) => sc.tec.dispose(),
-      );
+  static SearchC init() => GetIt.I.isRegistered<SearchC>()
+      ? GetIt.I.get<SearchC>()
+      : GetIt.I.registerSingleton<SearchC>(
+          SearchC(),
+          dispose: (sc) => sc.tec.dispose(),
+        );
 
   void getLocalMovies() {
-    movies.clear();
-    movies.addAll(sp.getLocalMovies());
+    final local = sp.getLocalMovies();
+    for (Movie movie in local) {
+      movies.indexWhere((e) => e.id == movie.id) == -1
+          ? movies.add(movie)
+          : movies[movies.indexWhere((e) => e.id == movie.id)] = movie;
+    }
   }
 
   void loadMovies() {
